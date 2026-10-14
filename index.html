@@ -2,153 +2,152 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Saddiest IDE</title>
 <style>
 *{box-sizing:border-box}
-body{
-  margin:0;
-  background:#0b1020;
-  color:#f1f5f9;
-  font-family:Arial,sans-serif;
-}
-header{
-  padding:20px 15px;
-  background:#111827;
-  border-bottom:1px solid #293449;
-}
-header h1{margin:0;color:#38bdf8;font-size:25px}
-header p{color:#94a3b8;margin:8px 0 0}
+body{margin:0;background:#0b1020;color:#f1f5f9;font-family:Arial,sans-serif}
+header{padding:20px 15px;background:#111827;border-bottom:1px solid #293449}
+h1{margin:0;color:#38bdf8;font-size:25px}
+header p,.note{color:#94a3b8}
 main{padding:15px;max-width:900px;margin:auto}
-label{display:block;margin:15px 0 8px}
-select,textarea,button{
-  width:100%;
-  padding:13px;
-  border-radius:9px;
-  font-size:16px;
-}
-select,textarea{
-  background:#111827;
-  color:#f8fafc;
-  border:1px solid #334155;
-}
-textarea{
-  height:280px;
-  resize:vertical;
-  font-family:monospace;
-  line-height:1.5;
-}
-button{
-  border:0;
-  background:#0284c7;
-  color:white;
-  font-weight:bold;
-  margin-top:12px;
-  cursor:pointer;
-}
-#output{
-  min-height:90px;
-  white-space:pre-wrap;
-  overflow-wrap:anywhere;
-  background:#020617;
-  border:1px solid #334155;
-  border-radius:9px;
-  padding:14px;
-  color:#4ade80;
-}
-.note{color:#94a3b8;font-size:13px;line-height:1.6}
+label{display:block;margin:18px 0 8px;font-size:18px}
+select,textarea,button{width:100%;font:inherit;border-radius:12px}
+select,textarea{background:#111827;color:#f1f5f9;border:1px solid #293449;padding:14px}
+textarea{min-height:300px;resize:vertical;font-family:monospace;line-height:1.5}
+button{border:0;padding:16px;margin-top:12px;background:#0284c7;color:white;font-weight:bold;cursor:pointer}
+#output{white-space:pre-wrap;overflow-wrap:anywhere;background:#020617;border:1px solid #293449;border-radius:12px;padding:15px;min-height:100px;color:#86efac}
+.note{line-height:1.5;font-size:14px}
 </style>
 </head>
 <body>
 <header>
-  <h1>⚡ Saddiest IDE</h1>
-  <p>Code. Run. Create.</p>
+<h1>⚡ Saddiest IDE</h1>
+<p>Write, run and download code</p>
 </header>
-
 <main>
-  <label for="language">Select Programming Language</label>
-  <select id="language">
-    <option value="html">HTML</option>
-    <option value="javascript">JavaScript</option>
-    <option value="python">Python</option>
-    <option value="c">C</option>
-    <option value="cpp">C++</option>
-    <option value="java">Java</option>
-    <option value="css">CSS</option>
-    <option value="php">PHP</option>
-  </select>
+<label for="language">Select Programming Language</label>
+<select id="language">
+<option value="python">Python</option>
+<option value="javascript">JavaScript</option>
+<option value="html">HTML</option>
+<option value="css">CSS</option>
+<option value="c">C</option>
+<option value="cpp">C++</option>
+<option value="java">Java</option>
+<option value="php">PHP</option>
+</select>
 
-  <label for="code">Write Your Code</label>
-  <textarea id="code" spellcheck="false"><h1>Hello, Saddiest IDE!</h1>
-<p>My first coding website is working!</p></textarea>
+<label for="code">Write Your Code</label>
+<textarea id="code" spellcheck="false">print("Hello from Saddiest IDE!")</textarea>
 
-  <button id="run">▶ Run Code</button>
-  <button id="save">💾 Download Code</button>
+<button id="run">▶ Run Code</button>
+<button id="download">💾 Download Code</button>
 
-  <label>📟 Output Console</label>
-  <div id="output" aria-live="polite">Your output will appear here.</div>
-  <p class="note">
-    HTML and JavaScript can run in this first version.
-    Python, C, C++, Java and PHP need a connected execution
-    service before they can run.
-  </p>
+<label>🖥️ Output Console</label>
+<div id="output">Ready! Apna code likho aur Run Code dabao.</div>
+<p class="note">
+HTML aur JavaScript browser mein run hote hain. Python, C, C++, Java aur PHP ke liye online execution service chahiye. Public service ki availability aur limits badal sakti hain.
+</p>
 </main>
 
 <script>
-const code = document.getElementById("code");
-const language = document.getElementById("language");
-const output = document.getElementById("output");
+const lang=document.getElementById('language');
+const code=document.getElementById('code');
+const output=document.getElementById('output');
 
-document.getElementById("run").addEventListener("click", () => {
-  const lang = language.value;
-  const source = code.value;
+const samples={
+python:'print("Hello from Saddiest IDE!")',
+javascript:'console.log("Hello from Saddiest IDE!");',
+html:'<h1>Hello from Saddiest IDE!</h1>',
+css:'body { background: #111827; color: white; }',
+c:'#include <stdio.h>\nint main(void){printf("Hello from Saddiest IDE!\\n");return 0;}',
+cpp:'#include <iostream>\nint main(){std::cout<<"Hello from Saddiest IDE!\\n";return 0;}',
+java:'public class Main { public static void main(String[] args) { System.out.println("Hello from Saddiest IDE!"); } }',
+php:'<?php echo "Hello from Saddiest IDE!"; ?>'
+};
 
-  if (lang === "html") {
-    const w = window.open("", "_blank");
-    if (!w) {
-      output.textContent = "Allow pop-ups to preview HTML, or open this website in a browser that permits them.";
-      return;
-    }
-    w.document.open();
-    w.document.write(source);
-    w.document.close();
-    output.textContent = "HTML preview opened in a new tab.";
-  } else if (lang === "javascript") {
-    const lines = [];
-    try {
-      const result = new Function(
-        "console",
-        '"use strict";\n' + source
-      )({
-        log: (...args) => lines.push(args.map(String).join(" "))
-      });
-      if (result !== undefined) lines.push(String(result));
-      output.textContent = lines.join("\n") || "Code executed. No output.";
-    } catch (e) {
-      output.textContent = "Error: " + e.message;
-    }
-  } else if (lang === "css") {
-    output.textContent = "CSS ko HTML preview mein use karo.";
-  } else {
-    output.textContent =
-      lang.toUpperCase() +
-      " execution service abhi connect nahi hai. Is language ko run karne ke liye compiler service chahiye.";
-  }
+lang.addEventListener('change',()=>{
+code.value=samples[lang.value];
+output.textContent='Ready to run '+lang.value+'.';
 });
 
-document.getElementById("save").addEventListener("click", () => {
-  const ext = {
-    html:"html", javascript:"js", python:"py",
-    c:"c", cpp:"cpp", java:"java", css:"css", php:"php"
-  }[language.value];
+document.getElementById('run').addEventListener('click',async()=>{
+const l=lang.value;
+const src=code.value;
+output.textContent='Running...';
 
-  const blob = new Blob([code.value], {type:"text/plain"});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "saddiest-code." + ext;
-  a.click();
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
+if(l==='html'){
+const w=window.open('','_blank');
+if(!w){output.textContent='Popup blocked. Allow popups.';return;}
+w.document.open();w.document.write(src);w.document.close();
+output.textContent='HTML preview opened in a new tab.';
+return;
+}
+
+if(l==='css'){
+const w=window.open('','_blank');
+if(!w){output.textContent='Popup blocked. Allow popups.';return;}
+w.document.open();
+w.document.write('<!doctype html><html><head><style>'+src+'</style></head><body><h2>CSS Preview</h2><p>Saddiest IDE</p></body></html>');
+w.document.close();
+output.textContent='CSS preview opened in a new tab.';
+return;
+}
+
+if(l==='javascript'){
+const logs=[];
+const fakeConsole={
+log:(...a)=>logs.push(a.join(' ')),
+error:(...a)=>logs.push('ERROR: '+a.join(' ')),
+warn:(...a)=>logs.push('WARN: '+a.join(' '))
+};
+try{
+const result=new Function('console','"use strict";\n'+src)(fakeConsole);
+if(result!==undefined)logs.push(String(result));
+output.textContent=logs.join('\n')||'Code ran successfully (no output).';
+}catch(e){output.textContent='Error: '+e.message;}
+return;
+}
+
+const versions={python:'3.10.0',c:'10.2.0',cpp:'10.2.0',java:'15.0.2',php:'8.2.3'};
+const extensions={python:'py',c:'c',cpp:'cpp',java:'java',php:'php'};
+try{
+const response=await fetch('https://emkc.org/api/v2/piston/execute',{
+method:'POST',
+headers:{'Content-Type':'application/json'},
+body:JSON.stringify({
+language:l,
+version:versions[l],
+files:[{
+name:l==='java'?'Main.java':'main.'+extensions[l],
+content:src
+}]
+})
+});
+if(!response.ok)throw new Error('Service HTTP '+response.status);
+const data=await response.json();
+const result=[];
+if(data.compile?.output)result.push(data.compile.output);
+if(data.run?.output)result.push(data.run.output);
+if(data.message)result.push(data.message);
+output.textContent=result.join('\n')||'Finished with no output.';
+}catch(e){
+output.textContent='Execution service connect nahi hui. Service unavailable ho sakti hai. Details: '+e.message;
+}
+});
+
+document.getElementById('download').addEventListener('click',()=>{
+const extensions={python:'py',javascript:'js',html:'html',css:'css',c:'c',cpp:'cpp',java:'java',php:'php'};
+const blob=new Blob([code.value],{type:'text/plain;charset=utf-8'});
+const url=URL.createObjectURL(blob);
+const a=document.createElement('a');
+a.href=url;
+a.download=lang.value==='java'?'Main.java':'saddiest-code.'+extensions[lang.value];
+document.body.appendChild(a);
+a.click();
+a.remove();
+URL.revokeObjectURL(url);
 });
 </script>
 </body>
