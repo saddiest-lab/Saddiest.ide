@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Saddiest IDE</title>
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:#0b1020;
+  color:#f1f5f9;
+  font-family:Arial,sans-serif;
+}
+header{
+  padding:20px 15px;
+  background:#111827;
+  border-bottom:1px solid #293449;
+}
+header h1{margin:0;color:#38bdf8;font-size:25px}
+header p{color:#94a3b8;margin:8px 0 0}
+main{padding:15px;max-width:900px;margin:auto}
+label{display:block;margin:15px 0 8px}
+select,textarea,button{
+  width:100%;
+  padding:13px;
+  border-radius:9px;
+  font-size:16px;
+}
+select,textarea{
+  background:#111827;
+  color:#f8fafc;
+  border:1px solid #334155;
+}
+textarea{
+  height:280px;
+  resize:vertical;
+  font-family:monospace;
+  line-height:1.5;
+}
+button{
+  border:0;
+  background:#0284c7;
+  color:white;
+  font-weight:bold;
+  margin-top:12px;
+  cursor:pointer;
+}
+#output{
+  min-height:90px;
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+  background:#020617;
+  border:1px solid #334155;
+  border-radius:9px;
+  padding:14px;
+  color:#4ade80;
+}
+.note{color:#94a3b8;font-size:13px;line-height:1.6}
+</style>
+</head>
+<body>
+<header>
+  <h1>⚡ Saddiest IDE</h1>
+  <p>Code. Run. Create.</p>
+</header>
+
+<main>
+  <label for="language">Select Programming Language</label>
+  <select id="language">
+    <option value="html">HTML</option>
+    <option value="javascript">JavaScript</option>
+    <option value="python">Python</option>
+    <option value="c">C</option>
+    <option value="cpp">C++</option>
+    <option value="java">Java</option>
+    <option value="css">CSS</option>
+    <option value="php">PHP</option>
+  </select>
+
+  <label for="code">Write Your Code</label>
+  <textarea id="code" spellcheck="false"><h1>Hello, Saddiest IDE!</h1>
+<p>My first coding website is working!</p></textarea>
+
+  <button id="run">▶ Run Code</button>
+  <button id="save">💾 Download Code</button>
+
+  <label>📟 Output Console</label>
+  <div id="output" aria-live="polite">Your output will appear here.</div>
+  <p class="note">
+    HTML and JavaScript can run in this first version.
+    Python, C, C++, Java and PHP need a connected execution
+    service before they can run.
+  </p>
+</main>
+
+<script>
+const code = document.getElementById("code");
+const language = document.getElementById("language");
+const output = document.getElementById("output");
+
+document.getElementById("run").addEventListener("click", () => {
+  const lang = language.value;
+  const source = code.value;
+
+  if (lang === "html") {
+    const w = window.open("", "_blank");
+    if (!w) {
+      output.textContent = "Allow pop-ups to preview HTML, or open this website in a browser that permits them.";
+      return;
+    }
+    w.document.open();
+    w.document.write(source);
+    w.document.close();
+    output.textContent = "HTML preview opened in a new tab.";
+  } else if (lang === "javascript") {
+    const lines = [];
+    try {
+      const result = new Function(
+        "console",
+        '"use strict";\n' + source
+      )({
+        log: (...args) => lines.push(args.map(String).join(" "))
+      });
+      if (result !== undefined) lines.push(String(result));
+      output.textContent = lines.join("\n") || "Code executed. No output.";
+    } catch (e) {
+      output.textContent = "Error: " + e.message;
+    }
+  } else if (lang === "css") {
+    output.textContent = "CSS ko HTML preview mein use karo.";
+  } else {
+    output.textContent =
+      lang.toUpperCase() +
+      " execution service abhi connect nahi hai. Is language ko run karne ke liye compiler service chahiye.";
+  }
+});
+
+document.getElementById("save").addEventListener("click", () => {
+  const ext = {
+    html:"html", javascript:"js", python:"py",
+    c:"c", cpp:"cpp", java:"java", css:"css", php:"php"
+  }[language.value];
+
+  const blob = new Blob([code.value], {type:"text/plain"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "saddiest-code." + ext;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+});
+</script>
+</body>
+  </html>
